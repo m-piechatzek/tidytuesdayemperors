@@ -14,3 +14,6 @@ ggplot(emperors, aes(cause, reign_end, "year", colour = killer)) + geom_point() 
 
 # killer label for cause and reign_end with color
 ggplot(emperors, aes(cause, reign_end, "year", color= killer, label=emperors$killer)) + geom_point() + geom_text(aes(label = emperors$killer), hjust=0, vjust=0) + theme(legend.position = "bottom")
+
+#calculate age
+ages <- age_calc(emperors$birth, enddate=emperors$death, units = "years", precise = TRUE)
