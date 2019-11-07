@@ -17,6 +17,7 @@ ggplot(emperors, aes(cause, reign_end, "year", color= killer, label=emperors$kil
 
 #calculate age (doesn't work because of BC AD years)
 ages <- age_calc(emperors$birth, enddate=emperors$death, units = "years", precise = TRUE) # dont think it works
+emperors$birth[is.na(emperors$birth)] <- "0001-01-01" # Remove NA birthdays
 emperors$birthage <- format(as.Date(emperors$birth, format="%d/%m/%Y"),"%Y")
 emperors$deathage <- format(as.Date(emperors$death, format="%d/%m/%Y"),"%Y")
 emperors$birthage <- as.numeric(emperors$birthage)
@@ -28,7 +29,7 @@ emperors$age <- ifelse(emperors$birthage > emperors$deathage,  emperors$birthage
 emperors %>% filter(emperors$age < 99) %>% ggplot(emperors, mapping = aes(y = age, x = name)) + geom_bar(stat = "identity")
 
 # bar graph with age and name and colored with province and ordered
-emperors %>% filter(emperors$age < 99) %>% ggplot(emperors, mapping = aes(y = age, x = reorder(name, -age), color= birth_prv)) + geom_bar(stat = "identity")
+emperors %>% filter(emperors$age < 99) %>% ggplot(emperors, mapping = aes(y = age, x = reorder(name, age), fill=factor(cause))) + geom_bar(stat = "identity") + coord_flip() + xlab("Emperor") + ylab("Age of Emperor") + guides(fill=guide_legend(title="Cause of Death"))
 
 # bar graph with birth_prv only
 ggplot(emperors, aes(birth_prv)) + geom_bar()
