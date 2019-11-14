@@ -1,6 +1,6 @@
 ---
 title: "Roman Emperors Statistics"
-author: "Monika Piechatzek"
+author: "Monika P"
 output: html_document
 ---
 ```{r}
