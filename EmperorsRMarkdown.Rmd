@@ -1,6 +1,6 @@
 ---
 title: "Roman Emperors Statistics"
-author: "Monika P"
+author: "Monika Piechatzek"
 output: html_document
 ---
 ```{r}
@@ -10,10 +10,10 @@ library(ggplot2)
 library(tidyverse)
 ```
 
-# Dot plot for Rise and Birth Province
-Simple bar graph that shows an emperor's rise and birth province
+# Bar graph showing Birth Province count
+Showing the amount of emperors who are born in which province the most
 ```{r}
-ggplot(emperors, aes(rise, birth_prv)) + geom_count()
+ggplot(emperors, aes(birth_prv)) + geom_bar() + xlab("Birth Province") + ylab("Count of Emperors") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
 # Bar chart for Rise
@@ -22,38 +22,26 @@ Simple bar chart to show what way emperor's rise to power
 ggplot(emperors, aes(rise)) + geom_bar() + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + xlab("Rise to Power") + ylab("Number of Emperors")
 ```
 
-# killer label for cause and reign_end
+# Dot plot for Rise and Birth Province
+Simple bar graph that shows an emperor's rise and birth province
 ```{r}
-ggplot(emperors, aes(cause, reign_end, "year", colour = killer)) + geom_point() + theme(legend.position = "bottom")
+ggplot(emperors, aes(rise, birth_prv)) + geom_count() + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + xlab("Rise to Power") + ylab("Birth Province")
 ```
 
-# killer label for cause and reign_end with color
+# Color coded Killer labels and Cause and Reign End
+Dot plot for cause of death and reign end with color coded killers
 ```{r}
-ggplot(emperors, aes(cause, reign_end, "year", color= killer, label=emperors$killer)) + geom_point() + geom_text(aes(label = emperors$killer), hjust=0, vjust=0) + theme(legend.position = "bottom")
+ggplot(emperors, aes(cause, reign_end, "year", colour = killer)) + geom_point() + theme(legend.position = "bottom") + xlab("Cause of Death") + ylab("Year of End of Reign")
 ```
 
-#calculate age (doesn't work because of BC AD years)
+#Calculate Age and Cause of Death
+Added a column of age of emperor when they passed and reason why they died
 ```{r}
-#ages <- age_calc(emperors$birth, enddate=emperors$death, units = "years", precise = TRUE) # dont think it works
 emperors$birth[is.na(emperors$birth)] <- "0001-01-01" # Remove NA birthdays
 emperors$birthage <- format(as.Date(emperors$birth, format="%d/%m/%Y"),"%Y")
 emperors$deathage <- format(as.Date(emperors$death, format="%d/%m/%Y"),"%Y")
 emperors$birthage <- as.numeric(emperors$birthage)
 emperors$deathage <- as.numeric(emperors$deathage)
 emperors$age <- ifelse(emperors$birthage > emperors$deathage,  emperors$birthage + emperors$deathage,  emperors$deathage - emperors$birthage)
-```
-
-# bar graph for ages and name
-```{r}
-emperors %>% filter(emperors$age < 99) %>% ggplot(emperors, mapping = aes(y = age, x = name)) + geom_bar(stat = "identity")
-```
-
-# bar graph with age and name and colored with province and ordered
-```{r}
 emperors %>% filter(emperors$age < 99) %>% ggplot(emperors, mapping = aes(y = age, x = reorder(name, age), fill=factor(cause))) + geom_bar(stat = "identity") + coord_flip() + xlab("Emperor") + ylab("Age of Emperor") + guides(fill=guide_legend(title="Cause of Death"))
-```
-
-# bar graph with birth_prv only
-```{r}
-ggplot(emperors, aes(birth_prv)) + geom_bar()
 ```
