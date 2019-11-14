@@ -1,19 +1,25 @@
-# Testing ma markdown
-# another test
-
+---
+title: "Roman Emperors Statistics"
+author: "Monika Piechatzek"
+output: html_document
+---
+```{r}
 emperors <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-08-13/emperors.csv")
 library(tidyr)
 library(ggplot2)
 library(tidyverse)
+```
 
-# Dot plot for rise and birth_prv
+# Dot plot for Rise and Birth Province
+Simple bar graph that shows an emperor's rise and birth province
 ```{r}
 ggplot(emperors, aes(rise, birth_prv)) + geom_count()
 ```
 
-# bar chart for rise
+# Bar chart for Rise
+Simple bar chart to show what way emperor's rise to power
 ```{r}
-ggplot(emperors, aes(rise)) + geom_bar()
+ggplot(emperors, aes(rise)) + geom_bar() + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + xlab("Rise to Power")
 ```
 
 # killer label for cause and reign_end
@@ -28,7 +34,7 @@ ggplot(emperors, aes(cause, reign_end, "year", color= killer, label=emperors$kil
 
 #calculate age (doesn't work because of BC AD years)
 ```{r}
-ages <- age_calc(emperors$birth, enddate=emperors$death, units = "years", precise = TRUE) # dont think it works
+#ages <- age_calc(emperors$birth, enddate=emperors$death, units = "years", precise = TRUE) # dont think it works
 emperors$birth[is.na(emperors$birth)] <- "0001-01-01" # Remove NA birthdays
 emperors$birthage <- format(as.Date(emperors$birth, format="%d/%m/%Y"),"%Y")
 emperors$deathage <- format(as.Date(emperors$death, format="%d/%m/%Y"),"%Y")
