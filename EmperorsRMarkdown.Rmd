@@ -19,7 +19,7 @@ ggplot(emperors, aes(rise, birth_prv)) + geom_count()
 # Bar chart for Rise
 Simple bar chart to show what way emperor's rise to power
 ```{r}
-ggplot(emperors, aes(rise)) + geom_bar() + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + xlab("Rise to Power")
+ggplot(emperors, aes(rise)) + geom_bar() + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + xlab("Rise to Power") + ylab("Number of Emperors")
 ```
 
 # killer label for cause and reign_end
